@@ -16,9 +16,7 @@ Descriptions of these directories are found in the following sections:
 
 ## data Directory
 
-Raw data .csv files used in this analysis are in `data`. 
-
-Raw data .csv files were downloaded from [McDowell and International Institute Of Tropical Forestry (IITF) (2024)](#references).
+Raw data .csv files used in this analysis were sourced from [McDowell and International Institute Of Tropical Forestry (IITF) (2024)](#references) and are contained in `data`. 
 
 Units for water chemistry data were sourced from **LUQ_LTER_MDLs.csv**.
 
