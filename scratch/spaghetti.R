@@ -1,6 +1,6 @@
 library(tidyverse)
 
-LTER <- read_csv("data/LUQ LTER MDLs.csv")
+LTER <- read_csv("data/LUQ_LTER_MDLs.csv")
 glimpse(LTER)
 BQ1 <- read_csv("data/QuebradaCuenca1-Bisley.csv")
 glimpse(BQ1)
@@ -38,14 +38,14 @@ BQ1_smoothed <- tibble(
 
 
 for(i in 1:nrow(BQ1_smoothed)) {
-  w1 <- BQ1_smoothed$window_start[i]
-  w2 <- w1 + weeks(9)
+  ws <- BQ1_smoothed$window_start[i]
+  w2 <- ws + weeks(9)
 
-  NH4N_data <- BQ1_Cleaned$`NH4-N`[(w1 <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
-  Ca_data <- BQ1_Cleaned$Ca[(w1 <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
-  Mg_data <- BQ1_Cleaned$Mg[(w1 <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
-  NO3N_data <- BQ1_Cleaned$`NO3-N`[(w1 <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
-  K_data <-BQ1_Cleaned$K[(w1 <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
+  NH4N_data <- BQ1_Cleaned$`NH4-N`[(ws <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
+  Ca_data <- BQ1_Cleaned$Ca[(ws <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
+  Mg_data <- BQ1_Cleaned$Mg[(ws <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
+  NO3N_data <- BQ1_Cleaned$`NO3-N`[(ws <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
+  K_data <-BQ1_Cleaned$K[(ws <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
 
   mean_NH4N <- mean(NH4N_data, na.rm = TRUE)
   mean_Ca <- mean(Ca_data, na.rm = TRUE)
