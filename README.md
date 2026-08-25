@@ -16,7 +16,7 @@ Descriptions of these directories are found in the following sections:
 
 ## data Directory
 
-Raw data .csv files used in this analysis are housed in `data`. 
+Raw data .csv files used in this analysis are in `data`. 
 
 Raw data .csv files were downloaded from [McDowell and International Institute Of Tropical Forestry (IITF) (2024)](#references).
 
@@ -26,7 +26,7 @@ Raw water chemistry data for the four sample sites of interest (BQ1, BQ2, BQ3, a
 
 ## scratch Directory
 
-Draft code is housed in `scratch`.
+Draft code is in `scratch`.
 
 ### Contributors
 
