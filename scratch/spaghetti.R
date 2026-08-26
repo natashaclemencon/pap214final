@@ -1,4 +1,5 @@
 library(tidyverse)
+source("R/moving-average.R")
 
 LTER <- read_csv("data/LUQ_LTER_MDLs.csv")
 glimpse(LTER)
@@ -26,41 +27,7 @@ PRM_Cleaned <- PRM |>
 
 
 # BQ1 Site Moving Averages -----------------------------------------------
-
-BQ1_smoothed <- tibble(
-  window_start = seq(ymd("1984-05-20"),
-  ymd("1994-12-31"), 
-  by = "9 weeks"), 
-  NH4N_ugL = NA,
-  Ca_mgL = NA,
-  Mg_mgL = NA,
-  NO3N_ugL = NA,
-  K_mgL = NA
-)
-
-
-for(i in 1:nrow(BQ1_smoothed)) {
-  ws <- BQ1_smoothed$window_start[i]
-  w2 <- ws + weeks(9)
-
-  NH4N_data <- BQ1_Cleaned$`NH4-N`[(ws <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
-  Ca_data <- BQ1_Cleaned$Ca[(ws <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
-  Mg_data <- BQ1_Cleaned$Mg[(ws <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
-  NO3N_data <- BQ1_Cleaned$`NO3-N`[(ws <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
-  K_data <-BQ1_Cleaned$K[(ws <= BQ1_Cleaned$Sample_Date & BQ1_Cleaned$Sample_Date < w2)]
-
-  mean_NH4N <- mean(NH4N_data, na.rm = TRUE)
-  mean_Ca <- mean(Ca_data, na.rm = TRUE)
-  mean_Mg <- mean(Mg_data, na.rm = TRUE)
-  mean_NO3N <- mean(NO3N_data, na.rm = TRUE)
-  mean_K <- mean(K_data, na.rm = TRUE)
-
-  BQ1_smoothed[i, 2] <- mean_NH4N 
-  BQ1_smoothed[i, 3] <- mean_Ca
-  BQ1_smoothed[i, 4] <- mean_Mg
-  BQ1_smoothed[i, 5] <- mean_NO3N
-  BQ1_smoothed[i, 6] <- mean_K
-}
+BQ1_smoothed <- moving_average(BQ1_Cleaned)
 # adding a site column for joining later
 BQ1_smoothed <- mutate(BQ1_smoothed, site_ID = "BQ1")
 
