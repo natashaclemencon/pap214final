@@ -2,9 +2,11 @@
 moving_average <- function(streamdata) {
   # Initialize a tibble to contain the results
   result <- tibble(
-    window_start = seq(ymd(min(streamdata$Sample_Date)),
-    ymd("1994-12-31"), 
-    by = "9 weeks"),
+    window_start = seq(
+      ymd(min(streamdata$Sample_Date)),
+      ymd("1994-12-31"),
+      by = "9 weeks"
+    ),
     NH4N_ugL = NA,
     Ca_mgL = NA,
     Mg_mgL = NA,
@@ -23,7 +25,7 @@ moving_average <- function(streamdata) {
     in_window <- w1 <= streamdata$Sample_Date & streamdata$Sample_Date < w2
 
     # Use indexing to pull out the ion concentrations that fall inside the window
-    
+
     nh4n_window <- streamdata$`NH4-N`[in_window]
     ca_window <- streamdata$Ca[in_window]
     mg_window <- streamdata$Mg[in_window]
@@ -37,6 +39,6 @@ moving_average <- function(streamdata) {
     result$NO3N_ugL[i] <- mean(no3n_data, na.rm = TRUE)
     result$K_mgL[i] <- mean(k_window, na.rm = TRUE)
   }
-  
+
   return(result)
 }

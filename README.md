@@ -26,7 +26,7 @@ Raw water chemistry data for the four sample sites of interest (BQ1, BQ2, BQ3, a
 
 Draft code is in [scratch](https://github.com/pr-scilla/pap214final/tree/main/scratch).
 
-### Contributors
+### Author
 
 Priscilla Pierce. [https://github.com/pr-scilla](https://github.com/pr-scilla)
 
