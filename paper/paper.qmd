@@ -1,21 +1,30 @@
-# Added lines 2 through 13 to Data section of paper.qmd 8/27/2026
+## Background
+This analysis reproduces figure 3 from Schaefer et al. (2000), which shows stream chemistry changes in four Puerto Rican streams pre and post Hurricane Hugo.
+
+## Data
+Raw water chemistry data .csv files were sourced from McDowell and International Institute Of Tropical Forestry (IITF) (2024).
+```{r}
 library(tidyverse)
-source("R/moving-average.R")
 
-LTER <- read_csv("data/LUQ_LTER_MDLs.csv")
+LTER <- read_csv("../data/LUQ_LTER_MDLs.csv")
 
-BQ1 <- read_csv("data/QuebradaCuenca1-Bisley.csv")
+BQ1 <- read_csv("../data/QuebradaCuenca1-Bisley.csv")
 
-BQ2 <- read_csv("data/QuebradaCuenca2-Bisley.csv")
+BQ2 <- read_csv("../data/QuebradaCuenca2-Bisley.csv")
 
-BQ3 <- read_csv("data/QuebradaCuenca3-Bisley.csv")
+BQ3 <- read_csv("../data/QuebradaCuenca3-Bisley.csv")
 
-PRM <- read_csv("data/RioMameyesPuenteRoto.csv")
+PRM <- read_csv("../data/RioMameyesPuenteRoto.csv")
+```
 
-# Added lines 17 through 27 to Methods section of paper.qmd 8/27/2026 
+## Methods
+Raw water chemistry data for four sample sites were processed as follows: 
+- Data for each site were cleaned. 
+- Moving averages for each ion of interest at were calculated for each site for every 9 weeks during the sampling period. The moving_average() function was created to automate this step.
+- Data for each site were joined together into one data frame.
 
-
-# Data cleaning ----------------------------------------------------------
+```{r}
+source("../R/moving-average.R")
 
 BQ1_Cleaned <- BQ1 |> 
   select(Sample_ID, Sample_Date, `NH4-N`, Ca, Mg, `NO3-N`, K)
@@ -29,35 +38,10 @@ BQ3_Cleaned <- BQ3 |>
 PRM_Cleaned <- PRM |> 
   select(Sample_ID, Sample_Date, `NH4-N`, Ca, Mg, `NO3-N`, K)
 
-
-# Added lines 31 through 34 to Methods section of paper.qmd 8/27/2026 
-
 # BQ1 Site Moving Averages -----------------------------------------------
 BQ1_smoothed <- moving_average(BQ1_Cleaned)
 # adding a site column for joining later
 BQ1_smoothed <- mutate(BQ1_smoothed, site_ID = "BQ1")
-
-#BQ1_smoothed_plot <- BQ1_smoothed |> 
- #  pivot_longer(
- #   cols = c(NH4N_ugL, Ca_mgL, Mg_mgL, NO3N_ugL, K_mgL),
- #   names_to = "ion",
- #  values_to = "concentration")
-
- # ggplot(
- #   data = BQ1_smoothed_plot,
- #   mapping = aes(
- #     x = window_start,
- #     y = concentration,
- #    color = ion
- #    )
- # ) + 
- # geom_point() +
-  #  geom_line() +
-   # scale_x_date(name = "Years") +
-    # facet_wrap(~ion, scales = "free")
-
-# Added lines 57 through 93 to Methods section of paper.qmd on 8/27/2026 
-# (did not have moving avg function used yet)
 
 # BQ2 Moving Averages ----------------------------------------------------
 BQ2_smoothed <- tibble(
@@ -97,9 +81,6 @@ for(i in 1:nrow(BQ2_smoothed)) {
 # adding a site column for joining later
 BQ2_smoothed <- mutate(BQ2_smoothed, site_ID = "BQ2")
 
-# Added lines 99 through 135 to Methods section of paper.qmd on 8/27/2026 
-# (did not have moving avg function used yet)
-
 # BQ3 Moving Averages ----------------------------------------------------
 BQ3_smoothed <- tibble(
   window_start = seq(ymd("1984-05-20"),
@@ -137,9 +118,6 @@ for(i in 1:nrow(BQ3_smoothed)) {
 }
 # adding a site column for joining later
 BQ3_smoothed <- mutate(BQ3_smoothed, site_ID = "BQ3")
-
-# Added lines 140 through 176 to Methods section of paper.qmd on 8/27/2026 
-# (did not have moving avg function used yet)
 
 # PRM Moving Averages ----------------------------------------------------
 PRM_smoothed <- tibble(
@@ -179,8 +157,6 @@ for(i in 1:nrow(PRM_smoothed)) {
 # adding a site column for joining later
 PRM_smoothed <- mutate(PRM_smoothed, site_ID = "PRM")
 
-# Added lines 180 through 191 to Methods section of paper.qmd on 8/27/2026
-
 # Joining all smoothed sites ---------------------------------------------
 
 sites_smoothed_joined <- BQ1_smoothed |> 
@@ -194,9 +170,13 @@ sites_smoothed_joined <- BQ1_smoothed |>
     PRM_smoothed, 
     by = c("window_start", "site_ID", "NH4N_ugL", "Ca_mgL", "K_mgL", "Mg_mgL", "NO3N_ugL"))
 
+```
 
-# Added lines 196 through 215 to Results section of paper.qmd on 8/27/2026
+## Results
+Water chemistry data for the period of interest were plotted for each site.
 
+Chemistry data for each ion are displayed in separate graphs.
+```{r}
 # Plotting smoothed and joined data for all sites together ---------------
 
 sites_smoothed_joined_plot <- sites_smoothed_joined |> 
@@ -217,3 +197,4 @@ sites_smoothed_joined_plot <- sites_smoothed_joined |>
     geom_line() +
     scale_x_date(name = "Years") +
     facet_wrap(~ion, scales = "free")
+```
