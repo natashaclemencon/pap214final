@@ -17,24 +17,28 @@ PRM <- read_csv("data/RioMameyesPuenteRoto.csv")
 # Data cleaning ----------------------------------------------------------
 
 BQ1_Cleaned <- BQ1 |>
-  select(Sample_ID, Sample_Date, `NH4-N`, Ca, Mg, `NO3-N`, K)
+  select(Sample_ID, Sample_Date, `NH4-N`, Ca, Mg, `NO3-N`, K) |>
+  mutate(Sample_ID = "BQ1")
 
 BQ2_Cleaned <- BQ2 |>
-  select(Sample_ID, Sample_Date, `NH4-N`, Ca, Mg, `NO3-N`, K)
+  select(Sample_ID, Sample_Date, `NH4-N`, Ca, Mg, `NO3-N`, K) |>
+  mutate(Sample_ID = "BQ2")
 
 BQ3_Cleaned <- BQ3 |>
-  select(Sample_ID, Sample_Date, `NH4-N`, Ca, Mg, `NO3-N`, K)
+  select(Sample_ID, Sample_Date, `NH4-N`, Ca, Mg, `NO3-N`, K) |>
+  mutate(Sample_ID = "BQ3")
 
 PRM_Cleaned <- PRM |>
-  select(Sample_ID, Sample_Date, `NH4-N`, Ca, Mg, `NO3-N`, K)
+  select(Sample_ID, Sample_Date, `NH4-N`, Ca, Mg, `NO3-N`, K) |>
+  mutate(Sample_ID = "PRM")
 
 
 # Added lines 31 through 34 to Methods section of paper.qmd 8/27/2026
 
 # BQ1 Site Moving Averages -----------------------------------------------
 BQ1_smoothed <- moving_average(BQ1_Cleaned)
-# adding a site column for joining later
-BQ1_smoothed <- mutate(BQ1_smoothed, site_ID = "BQ1")
+# adding a site column for joining later (added this step to moving_average function on 8/27)
+#BQ1_smoothed <- mutate(BQ1_smoothed, site_ID = "BQ1")
 
 #BQ1_smoothed_plot <- BQ1_smoothed |>
 #  pivot_longer(
@@ -249,7 +253,7 @@ sites_smoothed_joined <- BQ1_smoothed |>
 
 # Plotting smoothed and joined data for all sites together ---------------
 
-sites_smoothed_joined_plot <- sites_smoothed_joined |>
+Figure_3_Reproduction <- sites_joined_clean |>
   pivot_longer(
     cols = c(NH4N_ugL, Ca_mgL, Mg_mgL, NO3N_ugL, K_mgL),
     names_to = "ion",
@@ -257,7 +261,7 @@ sites_smoothed_joined_plot <- sites_smoothed_joined |>
   )
 
 ggplot(
-  data = sites_smoothed_joined_plot,
+  data = Figure_3_Reproduction,
   mapping = aes(
     x = window_start,
     y = concentration,

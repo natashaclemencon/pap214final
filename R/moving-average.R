@@ -3,7 +3,7 @@ moving_average <- function(streamdata) {
   # Initialize a tibble to contain the results
   result <- tibble(
     window_start = seq(
-      ymd(min(streamdata$Sample_Date)),
+      ymd("1988-01-01"),
       ymd("1994-12-31"),
       by = "9 weeks"
     ),
@@ -11,7 +11,8 @@ moving_average <- function(streamdata) {
     Ca_mgL = NA,
     Mg_mgL = NA,
     NO3N_ugL = NA,
-    K_mgL = NA
+    K_mgL = NA,
+    site_ID = streamdata$Sample_ID[1]
   )
 
   # Fill in the iterator and sequence
